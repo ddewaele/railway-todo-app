@@ -34,6 +34,7 @@ railway config apply --yes
 railway variable set "SESSION_SECRET=$(openssl rand -base64 48 | tr -d '\n')" --service app --skip-deploys
 railway domain --service app
 railway variable set "APP_URL=https://<domain>" --service app
+railway variable list --service app --json | jq -r .APP_URL             # exactly one "https://": `railway domain --json` already includes the scheme
 ```
 
 Keep `.github/workflows/railway-config.yml` guarded so it skips until `RAILWAY_TOKEN` exists.

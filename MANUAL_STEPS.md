@@ -76,7 +76,13 @@ railway config apply --yes                                          # Postgres +
 railway variable set "SESSION_SECRET=$(openssl rand -base64 48 | tr -d '\n')" --service app --skip-deploys
 railway domain --service app                                        # generate the public domain
 railway variable set "APP_URL=https://<domain>" --service app       # triggers a redeploy
+railway variable list --service app --json | jq -r .APP_URL         # must contain exactly one "https://"
 ```
+
+`railway domain --service app --json` returns `{"domain":"https://..."}` **with** the scheme. Do not
+prefix it again: a doubled `https://https://` makes Google reject the login with
+`Error 400: invalid_request` ("doesn't comply with Google's OAuth 2.0 policy"), because the
+`redirect_uri` is malformed.
 
 `NODE_ENV` and `DATABASE_URL` come from the IaC file.
 
