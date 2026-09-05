@@ -41,6 +41,9 @@ importers:
       '@hono/node-server':
         specifier: ^2.1.1
         version: 2.1.1(hono@4.13.7)
+      '@hono/oauth-providers':
+        specifier: ^0.9.0
+        version: 0.9.0(hono@4.13.7)
       '@repo/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -812,6 +815,12 @@ packages:
     engines: {node: '>=20'}
     peerDependencies:
       hono: ^4
+
+  '@hono/oauth-providers@0.9.0':
+    resolution: {integrity: sha512-OgDPB+AM6OgA5ys1y+7G24bkb8V4OINr+6JFDSuSYni80Mmd7BGpJ0e02StQDMPL9ebuWI8ABhxx1bk+9VBcBA==}
+    engines: {node: '>=18.4.0'}
+    peerDependencies:
+      hono: '>=3.0.0'
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -2532,6 +2541,10 @@ snapshots:
       levn: 0.4.1
 
   '@hono/node-server@2.1.1(hono@4.13.7)':
+    dependencies:
+      hono: 4.13.7
+
+  '@hono/oauth-providers@0.9.0(hono@4.13.7)':
     dependencies:
       hono: 4.13.7
 
