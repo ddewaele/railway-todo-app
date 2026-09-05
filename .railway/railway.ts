@@ -1,0 +1,56 @@
+import { defineRailway, github, postgres, preserve, project, service } from "railway/iac";
+
+/**
+ * Railway Infrastructure as Code for railway-todo-app.
+ *
+ * One file describes the whole environment: the Postgres database, the app
+ * service built from this GitHub repository, and the variables wiring them
+ * together. Apply it with the Railway CLI:
+ *
+ *   railway login && railway link      # once per machine
+ *   railway config plan                # preview
+ *   railway config apply               # create/update resources
+ *
+ * Secrets are never written here: `preserve()` keeps whatever value is set in
+ * Railway (dashboard or `railway variable set`), and the plan output redacts
+ * values by default.
+ *
+ * To reuse this for another app, change REPO, APP_NAME and REGION.
+ */
+const REPO = "ddewaele/railway-todo-app";
+const APP_NAME = "app";
+const REGION = "ams"; // Amsterdam (Railway region id; europe-west4 is the legacy name). Hobby plan: one region per service.
+
+export default defineRailway((ctx) => {
+  const db = postgres("Postgres", { region: REGION });
+
+  const app = service(APP_NAME, {
+    source: github(REPO, { branch: "main" }),
+    build: "pnpm build",
+    start: "node apps/server/dist/index.js",
+    // Runs between build and deploy with access to DATABASE_URL; a failing
+    // migration aborts the deploy and keeps the previous version serving.
+    preDeploy: "node apps/server/dist/migrate.js",
+    healthcheck: "/api/health",
+    healthcheckTimeout: 120,
+    replicas: { [REGION]: 1 },
+    // ON_FAILURE is Railway's default and is stored as null, so declaring it would show as
+    // permanent drift in `railway config plan`; only the retry count is explicit.
+    deploy: { restartPolicyMaxRetries: 5 },
+    env: {
+      NODE_ENV: "production",
+      DATABASE_URL: db.env.DATABASE_URL,
+      // Public origin, used for the OAuth redirect URI. Set once the Railway
+      // domain exists (generated domains are not part of the IaC file).
+      APP_URL: preserve(),
+      // Secrets: set in Railway, never in git.
+      SESSION_SECRET: preserve(),
+      GOOGLE_CLIENT_ID: preserve(),
+      GOOGLE_CLIENT_SECRET: preserve(),
+    },
+  });
+
+  return project(ctx.projectName ?? "railway-todo-app", {
+    resources: [db, app],
+  });
+});
