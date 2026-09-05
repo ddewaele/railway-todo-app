@@ -10,7 +10,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "dev": "pnpm --filter @repo/server dev",
+    "dev": "concurrently -n server,web -c blue,green \"pnpm --filter @repo/server dev\" \"pnpm --filter @repo/web dev\"",
     "build": "pnpm -r build",
     "start": "node apps/server/dist/index.js",
     "db:migrate": "pnpm --filter @repo/server db:migrate",
@@ -25,6 +25,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^22.20.1",
+    "concurrently": "^10.0.5",
     "eslint": "^10.10.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react-hooks": "^7.1.1",
