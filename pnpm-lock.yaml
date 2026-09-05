@@ -44,6 +44,9 @@ importers:
       '@hono/oauth-providers':
         specifier: ^0.9.0
         version: 0.9.0(hono@4.13.7)
+      '@hono/zod-validator':
+        specifier: ^0.9.1
+        version: 0.9.1(hono@4.13.7)(zod@4.5.4)
       '@repo/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -821,6 +824,12 @@ packages:
     engines: {node: '>=18.4.0'}
     peerDependencies:
       hono: '>=3.0.0'
+
+  '@hono/zod-validator@0.9.1':
+    resolution: {integrity: sha512-iiv6w0qrIc0arfvCtUqBWsvl4fXjzaTcQcCJTTtCnkawF9HHGE+KjEl0ox3gQJ6rKZEgE3mLExlQCF72M+mNuw==}
+    peerDependencies:
+      hono: '>=4.11.2'
+      zod: ^3.25.0 || ^4.0.0
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -2547,6 +2556,11 @@ snapshots:
   '@hono/oauth-providers@0.9.0(hono@4.13.7)':
     dependencies:
       hono: 4.13.7
+
+  '@hono/zod-validator@0.9.1(hono@4.13.7)(zod@4.5.4)':
+    dependencies:
+      hono: 4.13.7
+      zod: 4.5.4
 
   '@humanfs/core@0.19.2':
     dependencies:

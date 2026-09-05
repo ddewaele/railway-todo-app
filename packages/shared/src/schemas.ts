@@ -7,7 +7,6 @@ export const HealthSchema = z.object({
 });
 export type Health = z.infer<typeof HealthSchema>;
 
-/** Public shape of the signed-in user (GET /api/auth/me). */
 export const UserSchema = z.object({
   id: z.uuid(),
   email: z.email(),
@@ -15,3 +14,25 @@ export const UserSchema = z.object({
   avatarUrl: z.url().nullable(),
 });
 export type User = z.infer<typeof UserSchema>;
+
+export const TodoSchema = z.object({
+  id: z.uuid(),
+  title: z.string().min(1).max(500),
+  completed: z.boolean(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+export type Todo = z.infer<typeof TodoSchema>;
+
+export const CreateTodoSchema = z.object({
+  title: z.string().trim().min(1, "Title is required").max(500),
+});
+export type CreateTodo = z.infer<typeof CreateTodoSchema>;
+
+export const UpdateTodoSchema = z
+  .object({
+    title: z.string().trim().min(1).max(500),
+    completed: z.boolean(),
+  })
+  .partial();
+export type UpdateTodo = z.infer<typeof UpdateTodoSchema>;
